@@ -1,5 +1,7 @@
 # Drill Sergeant
 
+[![Build Status](https://travis-ci.org/zumba/drill-sergeant.png?branch=master)](https://travis-ci.org/zumba/drill-sergeant)
+
 Notify via email when github pull requests become stale. This is particularly useful for teams utilizing the github flow. This will send a report to a specified email (or emails) of any pull requests that are over the specified stale time.
 
 ## Install
