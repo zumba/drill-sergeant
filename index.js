@@ -1,9 +1,10 @@
 var command = require('commander'),
 	pkg = require('./package.json'),
 	github = require('./lib/github'),
-	stalerepos = require('./lib/stalerepos');
+	stalerepos = require('./lib/stalerepos'),
+	email = require('./lib/email');
 
-var ghClient, repos;
+var ghClient, repos, mail;
 
 command
 	.version(pkg.version)
@@ -30,6 +31,8 @@ if (!command.email) {
 repos = command.repo.split(',');
 
 ghClient = new github(process.env.GITHUB_TOKEN);
+mail = new email(command.email);
+
 stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
-	console.log(results);
+	mail.notify(results);
 });
