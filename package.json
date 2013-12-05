@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "description": "Notify via email when github pull requests become stale.",
   "main": "index.js",
+  "bin": {
+    "drillsergeant": "./bin/drillsergeant.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
