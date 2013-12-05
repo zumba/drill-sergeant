@@ -36,5 +36,9 @@ ghClient = new github(process.env.GITHUB_TOKEN);
 mail = new email(command.email);
 
 stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
+	if (!results.length) {
+		console.log('No stale pull requests to report.');
+		return;
+	}
 	mail.notify(results);
 });
