@@ -12,6 +12,7 @@ command
 	.version(pkg.version)
 	.option('-r, --repo [user/repository]', 'Define the [comma delimited] repositories to check PRs.')
 	.option('-e, --email [email@address]', 'Set the [comma delimited] email address(es) to be notified.')
+	.option('-f, --replyto [Notifier Title <email@address>]', 'Set the reply to email address.', 'Drill Sergeant Notifier <no-reply@drillsergeant>')
 	.option('-s, --staletime [number of hours]', 'Set the PR stale threshold. (default: 24)', 24)
 	.parse(process.argv);
 
@@ -33,7 +34,7 @@ if (!command.email) {
 repos = command.repo.split(',');
 
 ghClient = new github(process.env.GITHUB_TOKEN);
-mail = new email(command.email);
+mail = new email(command.email, command.replyto);
 
 stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
 	if (!results.length) {
