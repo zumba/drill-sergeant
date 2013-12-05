@@ -1,10 +1,9 @@
-var _ = require('underscore'),
-	async = require('async'),
-	command = require('commander'),
+var command = require('commander'),
 	pkg = require('./package.json'),
-	github = require('./lib/github');
+	github = require('./lib/github'),
+	stalerepos = require('./lib/stalerepos');
 
-var ghClient, repos, entries = [], now = new Date().getTime();
+var ghClient, repos;
 
 command
 	.version(pkg.version)
@@ -31,45 +30,6 @@ if (!command.email) {
 repos = command.repo.split(',');
 
 ghClient = new github(process.env.GITHUB_TOKEN);
-
-async.map(
-	repos, 
-	function(repo, callback) {
-		ghClient.getPullRequests(repo, 'open', function(err, res) {
-			var result = {};
-			if (err) {
-				callback(err);
-			}
-			delete res.meta;
-			result.repo = repo;
-			result.prs = res;
-			callback(null, result);
-		});
-	},
-	function(err, res) {
-		if (err) {
-			console.error(err);
-			process.exit(1);
-		}
-		_.each(res, function(repo) {
-			var prs;
-			if (repo.prs.length) {
-				var filtered;
-				prs = [];
-				filtered = _.filter(repo.prs, function(pr) {
-					return (now - new Date(pr.created_at).getTime()) / 1000 / 60 / 60 >= command.staletime;
-				})
-				if (filtered.length) {
-					_.each(filtered, function(pr) {
-						prs.push(_.pick(pr, ['created_at', 'html_url', 'title']));
-					});
-					entries.push({
-						repo: repo.repo,
-						prs: prs
-					});
-				}
-			}
-		});
-		console.log(entries);
-	}
-);
+stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
+	console.log(results);
+});
