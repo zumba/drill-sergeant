@@ -6,6 +6,8 @@ var command = require('commander'),
 
 var ghClient, repos, mail;
 
+process.title = 'drillsergeant';
+
 command
 	.version(pkg.version)
 	.option('-r, --repo [user/repository]', 'Define the [comma delimited] repositories to check PRs.')
