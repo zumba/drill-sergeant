@@ -1,0 +1,11 @@
+<h1>Drill Sergeant</h1>
+<h2>Stale Pull Request Report</h2>
+
+<% _.each(repos, function(repo) { %>
+	<h4><%= repo.repo %></h4>
+	<ul>
+	<% _.each(repo.prs, function(pr) { %>
+		<li><a href="<%= pr.html_url %>"><%= pr.title %></a></li>
+	<% }); %>
+	</ul>
+<% }); %>
