@@ -1,4 +1,4 @@
-  {
+{
   "name": "drill-sergeant",
   "version": "0.0.1",
   "description": "Notify via email when github pull requests become stale.",
@@ -23,6 +23,8 @@
   "dependencies": {
     "github": "0.1.*",
     "nodemailer": "0.5.*",
+    "commander": "2.1.*",
+    "async": "0.2.*",
     "underscore": "1.5.*"
   }
 }
