@@ -1,0 +1,22 @@
+{
+    "curly" : true,
+    "eqeqeq" : true,
+    "immed" : true,
+    "latedef" : true,
+    "newcap" : true,
+    "noarg" : true,
+    "sub" : true,
+    "undef" : true,
+    "boss" : true,
+    "eqnull" : true,
+    "browser" : true,
+    "globals" : {
+        "__dirname" : true,
+        "process": true,
+        "_" : true,
+        "module" : true,
+        "exports" : true,
+        "require" : true,
+        "console" : true
+    }
+}

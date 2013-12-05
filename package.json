@@ -29,5 +29,9 @@
     "commander": "2.1.*",
     "async": "0.2.*",
     "underscore": "1.5.*"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-jshint": "~0.6.4"
   }
 }
