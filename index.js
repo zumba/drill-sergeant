@@ -8,7 +8,8 @@ var ghClient, repos, entries = [], now = new Date().getTime();
 
 command
 	.version(pkg.version)
-	.option('-r, --repo [user/repository]', 'Define the repositories to check PRs. (Comma delimited)')
+	.option('-r, --repo [user/repository]', 'Define the [comma delimited] repositories to check PRs.')
+	.option('-e, --email [email@address]', 'Set the [comma delimited] email address(es) to be notified.')
 	.option('-s, --staletime [number of hours]', 'Set the PR stale threshold. (default: 24)', 24)
 	.parse(process.argv);
 
@@ -19,6 +20,11 @@ if (!process.env.GITHUB_TOKEN) {
 
 if (!command.repo) {
 	console.error('Repo argument must be provided.');
+	process.exit(1);
+}
+
+if (!command.email) {
+	console.error('Email argument must be provided.');
 	process.exit(1);
 }
 
