@@ -1,0 +1,28 @@
+  {
+  "name": "drill-sergeant",
+  "version": "0.0.1",
+  "description": "Notify via email when github pull requests become stale.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zumba/drill-sergeant"
+  },
+  "keywords": [
+    "github",
+    "pull requests",
+    "notification"
+  ],
+  "author": "Chris Saylor",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/zumba/drill-sergeant/issues"
+  },
+  "dependencies": {
+    "github": "0.1.*",
+    "nodemailer": "0.5.*",
+    "underscore": "1.5.*"
+  }
+}
