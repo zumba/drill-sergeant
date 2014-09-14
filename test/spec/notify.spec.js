@@ -1,5 +1,5 @@
-describe('Notify Lib', function() {
-    var notify = require('../../lib/notify');
+var notify = require('../../lib/notify');
+describe('Notifying All', function() {
     var notifier, lib, callback;
     beforeEach(function() {
         notifier = {
@@ -19,5 +19,24 @@ describe('Notify Lib', function() {
     it('should have been called with provided repo data', function() {
         expect(notifier.notify.mostRecentCall.args[0]).toEqual('somedata');
         expect(notifier.notify.mostRecentCall.args[1] instanceof Function).toBeTruthy()
+    });
+});
+
+describe('Adding notifier', function() {
+    var notifier, lib;
+    beforeEach(function() {
+        lib = new notify();
+    });
+    it('should throw an exception', function() {
+        var addInvalid = function() {
+            lib.add({nonotify: function() {}});
+        }
+        expect(addInvalid).toThrow();
+    });
+    it('should not throw an exception', function() {
+        var addValid = function() {
+            lib.add({notify: function() {}});
+        }
+        expect(addValid).not.toThrow();
     });
 });
