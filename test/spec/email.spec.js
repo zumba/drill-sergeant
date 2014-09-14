@@ -1,24 +1,14 @@
+var fs = require('fs');
 var email = require('../../lib/email');
+var _ = require('underscore');
 
 describe('Email lib', function() {
 	it('will email a notification with stale repos', function() {
-		var mail, clientMock;
+		var mail, clientMock, template, repos;
 
 		mail = new email('test@test.com', 'test-from@test.com');
-		clientMock = function(options) {
-			expect(options).toEqual({
-				from: 'test-from@test.com',
-				to: 'test@test.com',
-				subject: 'Drill Sergeant Stale Pull Request Report (2013/12/01)',
-  				html: '<h1>Drill Sergeant</h1>\n<h2>Stale Pull Request Report</h2>\n\n\n\t<h4>zumba/repository</h4>\n\t<ul>\n\t\n\t\t<li><a href="https://github/zumba/repository/pull/19">Some pull request</a> [someuser]</li>\n\t\n\t</ul>\n\n'
-			});
-		};
-		mail.setClient(clientMock);
-		// Mock the date on the subject
-		email.getSubjectDate = function() {
-			return '2013/12/01';
-		}
-		mail.notify([
+		template = _.template(fs.readFileSync(__dirname + '/../../templates/email.html').toString());
+		repos = [
 			{
 				repo: 'zumba/repository',
 				prs: [{
@@ -28,6 +18,20 @@ describe('Email lib', function() {
 					user: 'someuser'
 				}]
 			}
-		]);
+		];
+		clientMock = function(options) {
+			expect(options).toEqual({
+				from: 'test-from@test.com',
+				to: 'test@test.com',
+				subject: 'Drill Sergeant Stale Pull Request Report (2013/12/01)',
+				html: template({repos: repos})
+			});
+		};
+		mail.setClient(clientMock);
+		// Mock the date on the subject
+		email.getSubjectDate = function() {
+			return '2013/12/01';
+		}
+		mail.notify(repos);
 	});
 });
