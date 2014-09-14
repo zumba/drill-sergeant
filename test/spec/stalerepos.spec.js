@@ -41,7 +41,9 @@ describe('Stale Repo Lib', function() {
 			expect(res[0].prs[0]).toEqual({
 				created_at: jasmine.any(String),
 				html_url: jasmine.any(String),
-				title: jasmine.any(String)
+				title: jasmine.any(String),
+				number: jasmine.any(Number),
+				user: jasmine.any(String)
 			});
 		});
 	});
