@@ -4,6 +4,7 @@ var command = require('commander'),
 	stalerepos = require('./lib/stalerepos'),
 	notifiers = {
 		email: require('./lib/notifiers/email'),
+		github: require('./lib/notifiers/github')
 	},
 	notify = require('./lib/notify');
 
@@ -14,8 +15,9 @@ process.title = 'drillsergeant';
 command
 	.version(pkg.version)
 	.option('-r, --repo [user/repository]', 'Define the [comma delimited] repositories to check PRs.')
-	.option('-e, --email [email@address]', 'Set the [comma delimited] email address(es) to be notified.')
+	.option('-e, --email [email@address]', 'Set the [comma delimited] email address(es) to be notified.', null)
 	.option('-f, --replyto [Notifier Title <email@address>]', 'Set the reply to email address.', 'Drill Sergeant Notifier <no-reply@drillsergeant>')
+	.option('-l, --label', 'Should drill sergeant label the PR as stale?', false)
 	.option('-s, --staletime [number of hours]', 'Set the PR stale threshold. (default: 24)', 24)
 	.parse(process.argv);
 
@@ -29,8 +31,8 @@ if (!command.repo) {
 	process.exit(1);
 }
 
-if (!command.email) {
-	console.error('Email argument must be provided.');
+if (!command.email && !command.label) {
+	console.error('Email or label argument must be provided.');
 	process.exit(1);
 }
 
@@ -48,5 +50,9 @@ stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
 	if (command.email) {
 		notifier.add(new notifiers.email(command.email, command.replyto));
 	}
+	if (command.label) {
+		notifier.add(new notifiers.github(ghClient));
+	}
+	
 	notifier.notifyAll(results);
 });
