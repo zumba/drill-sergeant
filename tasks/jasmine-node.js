@@ -12,7 +12,7 @@ module.exports = function(grunt) {
                         child;
 
                 child = exec(
-                'jasmine-node --captureExceptions test/spec/*.spec.js',
+                'jasmine-node --captureExceptions test/spec/',
                 function(error, stdout, stderr) {
                         grunt.log.writeln(stdout);
                         grunt.log.writeln(stderr);

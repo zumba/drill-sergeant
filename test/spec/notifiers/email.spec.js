@@ -1,4 +1,4 @@
-var email = require('../../lib/notifiers/email');
+var email = require('../../../lib/notifiers/email');
 
 describe('Email notifier lib', function() {
 	it('will email a notification with stale repos', function() {
