@@ -2,7 +2,8 @@ var command = require('commander'),
 	pkg = require('./package.json'),
 	github = require('./lib/github'),
 	stalerepos = require('./lib/stalerepos'),
-	email = require('./lib/email');
+	email = require('./lib/email'),
+	notify = require('./lib/notify');
 
 var ghClient, repos, mail;
 
@@ -34,6 +35,7 @@ if (!command.email) {
 repos = command.repo.split(',');
 
 ghClient = new github(process.env.GITHUB_TOKEN);
+notifier = new notify();
 mail = new email(command.email, command.replyto);
 
 stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
@@ -41,5 +43,6 @@ stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
 		console.log('No stale pull requests to report.');
 		return;
 	}
-	mail.notify(results);
+	notifier.add(mail);
+	notifier.notifyAll(results);
 });
