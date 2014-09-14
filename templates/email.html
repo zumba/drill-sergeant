@@ -5,7 +5,7 @@
 	<h4><%= repo.repo %></h4>
 	<ul>
 	<% _.each(repo.prs, function(pr) { %>
-		<li><a href="<%= pr.html_url %>"><%= pr.title %></a></li>
+		<li><a href="<%= pr.html_url %>"><%= pr.title %></a> [<%= pr.user %>]</li>
 	<% }); %>
 	</ul>
 <% }); %>
