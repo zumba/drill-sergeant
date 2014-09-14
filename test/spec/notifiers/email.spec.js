@@ -1,6 +1,6 @@
-var email = require('../../lib/email');
+var email = require('../../lib/notifiers/email');
 
-describe('Email lib', function() {
+describe('Email notifier lib', function() {
 	it('will email a notification with stale repos', function() {
 		var mail, clientMock;
 
