@@ -12,8 +12,8 @@ describe('Stale Repo Lib', function() {
 			behind = new Date();
 		exceeded.setHours(exceeded.getHours() - 10);
 		behind.setHours(behind.getHours() - 4);
-		expect(stalerepos.isStale(exceeded.toISOString(), 5)).toBeTruthy();
-		expect(stalerepos.isStale(behind.toISOString(), 5)).toBeFalsy();
+		expect(stalerepos.isStale(5, {created_at: exceeded.toISOString()})).toBeTruthy();
+		expect(stalerepos.isStale(5, {created_at: behind.toISOString()})).toBeFalsy();
 	});
 	it('will retrieve stale pull requests for all repos', function() {
 		var gc = new github('token');
