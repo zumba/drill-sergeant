@@ -6,6 +6,8 @@ Keep track and get notified when github pull requests become stale.This is parti
 
 As of `0.1.0`, Drill Sergeant can also be configured (with the `-l, --label` command) to label the PRs as `Stale`.
 
+![Screen shot](https://raw.githubusercontent.com/zumba/drill-sergeant/master/label-screenshot.png)
+
 ## Install
 
 ```
