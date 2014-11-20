@@ -1,6 +1,6 @@
 {
   "name": "drill-sergeant",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Notify via email when github pull requests become stale.",
   "main": "index.js",
   "bin": {
