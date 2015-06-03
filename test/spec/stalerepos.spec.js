@@ -27,6 +27,7 @@ describe('Stale Repo Lib', function() {
 					var target = new Date();
 					target.setHours(target.getHours() - 4);
 					fixed.created_at = target.toISOString();
+					fixed.updated_at = target.toISOString();
 					callback(null, fixed);
 				}
 			}
@@ -43,7 +44,8 @@ describe('Stale Repo Lib', function() {
 				html_url: jasmine.any(String),
 				title: jasmine.any(String),
 				number: jasmine.any(Number),
-				user: jasmine.any(String)
+				user: jasmine.any(String),
+				updated_at: jasmine.any(String)
 			});
 		});
 	});
