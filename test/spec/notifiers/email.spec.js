@@ -1,6 +1,6 @@
 var fs = require('fs');
 var email = require('../../../lib/notifiers/email');
-var _ = require('underscore');
+var _ = require('lodash');
 
 describe('Email lib', function() {
 	it('will email a notification with stale repos', function() {
