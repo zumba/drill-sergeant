@@ -1,6 +1,6 @@
 var fs = require('fs');
 var email = require('../../../lib/notifiers/email');
-var _ = require('underscore');
+var _ = require('lodash');
 
 describe('Email lib', function() {
 	it('will email a notification with stale repos', function() {
@@ -14,7 +14,7 @@ describe('Email lib', function() {
 				prs: [{
 					created_at: new Date().toISOString(),
 					html_url: 'https://github/zumba/repository/pull/19',
-					title: 'Some pull request',
+					title: 'Some <b>awesome</b> pull request',
 					user: 'someuser'
 				}]
 			}
@@ -26,6 +26,7 @@ describe('Email lib', function() {
 				subject: 'Drill Sergeant Stale Pull Request Report (2013/12/01)',
 				html: template({repos: repos})
 			});
+			expect(_.trim(options.html)).toEqual(_.trim(fs.readFileSync(__dirname + '/email_output.html').toString()));
 		};
 		mail.setClient(clientMock);
 		// Mock the date on the subject

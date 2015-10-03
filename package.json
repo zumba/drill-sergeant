@@ -24,11 +24,11 @@
     "url": "https://github.com/zumba/drill-sergeant/issues"
   },
   "dependencies": {
-    "github": "0.1.*",
-    "nodemailer": "0.5.*",
-    "commander": "2.1.*",
     "async": "0.2.*",
-    "underscore": "1.5.*"
+    "commander": "2.1.*",
+    "github": "0.1.*",
+    "lodash": "^3.10.1",
+    "nodemailer": "0.5.*"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
