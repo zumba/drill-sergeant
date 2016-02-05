@@ -41,18 +41,17 @@ repos = command.repo.split(',');
 ghClient = new github(process.env.GITHUB_TOKEN);
 notifier = new notify();
 
-
-stalerepos.retrieve(repos, ghClient, command.staletime, function(results) {
-	if (!results.length) {
-		console.log('No stale pull requests to report.');
-		return;
-	}
-	if (command.email) {
-		notifier.add(new notifiers.email(command.email, command.replyto));
-	}
-	if (command.label) {
-		notifier.add(new notifiers.github(ghClient));
-	}
-	
-	notifier.notifyAll(results);
-});
+stalerepos.retrieve(repos, ghClient, command.staletime)
+	.then(function(results) {
+		if (!results.length) {
+			console.log('No stale pull requests to report.');
+			return;
+		}
+		if (command.email) {
+			notifier.add(new notifiers.email(command.email, command.replyto));
+		}
+		if (command.label) {
+			notifier.add(new notifiers.github(ghClient));
+		}
+		notifier.notifyAll(results);
+	});
