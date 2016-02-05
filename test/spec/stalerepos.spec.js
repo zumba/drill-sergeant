@@ -5,22 +5,20 @@ describe('Stale Repo Lib', function() {
 	it('will calculate the stale time', function() {
 		var target = new Date();
 		target.setHours(target.getHours() - 4);
-		expect(Math.round(stalerepos.calcStaleTime(target))).toEqual(4);
+		expect(Math.round(stalerepos.calcStaleTime(target))).to.equal(4);
 	});
 	it('will determine if the stale time has exceeded the threshold', function() {
 		var exceeded = new Date(),
 			behind = new Date();
 		exceeded.setHours(exceeded.getHours() - 10);
 		behind.setHours(behind.getHours() - 4);
-		expect(stalerepos.isStale(5, {created_at: exceeded.toISOString()})).toBeTruthy();
-		expect(stalerepos.isStale(5, {created_at: behind.toISOString()})).toBeFalsy();
+		expect(stalerepos.isStale(5, {created_at: exceeded.toISOString()})).to.be.true;
+		expect(stalerepos.isStale(5, {created_at: behind.toISOString()})).to.be.false;
 	});
-	it('will retrieve stale pull requests for all repos', function() {
+	it('will retrieve stale pull requests for all repos', function(done) {
 		var gc = new github('token');
 		var clientMock = {
-			authenticate: function() {
-				//no op
-			},
+			authenticate: function() {},
 			pullRequests: {
 				getAll: function(options, callback) {
 					var fixed = require('../fixture/pullrequests.json');
@@ -33,20 +31,19 @@ describe('Stale Repo Lib', function() {
 			}
 		};
 		gc.setClient(clientMock);
-		stalerepos.retrieve(['zumba/repository'], gc, 1, function(res) {
-			expect(res.length).toEqual(1);
-			expect(res[0]).toEqual({
-				repo: jasmine.any(String),
-				prs: jasmine.any(Array)
-			});
-			expect(res[0].prs[0]).toEqual({
-				created_at: jasmine.any(String),
-				html_url: jasmine.any(String),
-				title: jasmine.any(String),
-				number: jasmine.any(Number),
-				user: jasmine.any(String),
-				updated_at: jasmine.any(String)
-			});
-		});
+		stalerepos.retrieve(['zumba/repository'], gc, 1).should.eventually.deep.equal([
+			{
+				repo: 'zumba/repository',
+				prs: [
+					{
+						"created_at": "2013-12-04T21:44:54Z",
+						"html_url": "https://github.com/zumba/repository/pull/19",
+						"number": 19,
+						"title": "Some pull request.",
+						"user": "cjsaylor"
+					}
+				]
+			}
+		]).notify(done);
 	});
 });

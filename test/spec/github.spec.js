@@ -1,26 +1,26 @@
-describe('Github Lib', function() {
-	var github = require('../../lib/github');
-	it('will get pull requests for a repo', function() {
-		var ghClient;
-		var clientMock = {
-			_testAuthCalled: 0,
-			authenticate: function() {
-				//no op
-				clientMock._testAuthCalled++;
-			},
+var github = require('../../lib/github');
+
+describe('Github lib', function() {
+	it('will get pull requests for a repo', function(done) {
+		var ghClient = new github('token');
+		var authenticateSpy = sinon.spy();
+		ghClient.setClient({
+			authenticate: authenticateSpy,
 			pullRequests: {
 				getAll: function(options, callback) {
-					expect(options).toEqual({
+					expect(options).to.deep.equal({
 						user: 'zumba',
 						repo: 'repository',
 						state: 'open'
 					});
-					expect(clientMock._testAuthCalled).toEqual(1);
+					callback(null, 'somedata');
 				}
 			}
-		};
-		ghClient = new github('token');
-		ghClient.setClient(clientMock);
-		ghClient.getPullRequests('zumba/repository', 'open', function() {});
+		});
+		ghClient.getPullRequests('zumba/repository', 'open').should.eventually.be.equal('somedata').notify(done);
+		authenticateSpy.should.have.been.calledWith({
+			type: 'oauth',
+			token: 'token'
+		});
 	});
 });

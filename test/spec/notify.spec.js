@@ -1,42 +1,26 @@
 var notify = require('../../lib/notify');
-describe('Notifying All', function() {
-    var notifier, lib, callback;
+
+describe('Notifier', function() {
+    var subject;
     beforeEach(function() {
-        notifier = {
-            notify: function(repos) {}
-        };
-        lib = new notify();
-        lib.add(notifier);
-
-        spyOn(notifier, 'notify');
-
-        callback = function() {}
-        lib.notifyAll('somedata', callback);
+        subject = new notify();
     });
     it('should ensure attached notifier is called', function() {
-        expect(notifier.notify).toHaveBeenCalled();
+        var notifier = {
+            notify: sinon.spy()
+        };
+        subject.add(notifier);
+        subject.notifyAll('somedata');
+        notifier.notify.should.have.been.calledWith('somedata');
     });
-    it('should have been called with provided repo data', function() {
-        expect(notifier.notify.mostRecentCall.args[0]).toEqual('somedata');
-        expect(notifier.notify.mostRecentCall.args[1] instanceof Function).toBeTruthy()
+    it('should throw an exception if invalid notifier attached.', function() {
+        var invalid = {};
+        expect(subject.add.bind(subject, invalid)).to.throw(Error);
     });
-});
-
-describe('Adding notifier', function() {
-    var notifier, lib;
-    beforeEach(function() {
-        lib = new notify();
-    });
-    it('should throw an exception', function() {
-        var addInvalid = function() {
-            lib.add({nonotify: function() {}});
-        }
-        expect(addInvalid).toThrow();
-    });
-    it('should not throw an exception', function() {
-        var addValid = function() {
-            lib.add({notify: function() {}});
-        }
-        expect(addValid).not.toThrow();
+    it('should not throw an exception when adding valid notifier.', function() {
+        var notifier = {
+            notify: function() {}
+        };
+        expect(subject.add.bind(subject, notifier)).not.to.throw(Error);
     });
 });
