@@ -1,12 +1,29 @@
 var fs = require('fs');
 var email = require('../../../lib/notifiers/email');
+var github = require('../../../lib/github');
 var _ = require('lodash');
 
 describe('Email lib', function() {
 	it('will email a notification with stale repos', function() {
 		var mail, clientMock, template, repos;
+		var ghClient = new github('token');
+		ghClient.setClient({
+			authenticate: function() {},
+			issues: {
+				getRepoIssue: function(options, callback) {
+					expect(options).to.deep.equal({
+						user: 'zumba',
+						repo: 'repository',
+						number: '19'
+					});
+					callback(null, {
+						labels: [{name: 'sometag'}]
+					});
+				}
+			}
+		});
 
-		mail = new email('test@test.com', 'test-from@test.com');
+		mail = new email('test@test.com', 'test-from@test.com', ghClient);
 		template = _.template(fs.readFileSync(__dirname + '/../../../templates/email.html').toString());
 		repos = [
 			{
@@ -15,7 +32,8 @@ describe('Email lib', function() {
 					created_at: new Date().toISOString(),
 					html_url: 'https://github/zumba/repository/pull/19',
 					title: 'Some <b>awesome</b> pull request',
-					user: 'someuser'
+					user: 'someuser',
+					number: '19'
 				}]
 			}
 		];
