@@ -31,7 +31,13 @@
     "nodemailer": "0.5.*"
   },
   "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.2.0",
     "grunt": "~0.4.1",
-    "grunt-contrib-jshint": "~0.6.4"
+    "grunt-contrib-jshint": "~0.6.4",
+    "grunt-mocha-test": "^0.12.7",
+    "mocha": "^2.4.5",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0"
   }
 }

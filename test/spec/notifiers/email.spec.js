@@ -20,13 +20,13 @@ describe('Email lib', function() {
 			}
 		];
 		clientMock = function(options) {
-			expect(options).toEqual({
+			expect(options).to.deep.equal({
 				from: 'test-from@test.com',
 				to: 'test@test.com',
 				subject: 'Drill Sergeant Stale Pull Request Report (2013/12/01)',
 				html: template({repos: repos})
 			});
-			expect(_.trim(options.html)).toEqual(_.trim(fs.readFileSync(__dirname + '/email_output.html').toString()));
+			expect(_.trim(options.html)).to.deep.equal(_.trim(fs.readFileSync(__dirname + '/email_output.html').toString()));
 		};
 		mail.setClient(clientMock);
 		// Mock the date on the subject
