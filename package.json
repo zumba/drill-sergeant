@@ -24,7 +24,7 @@
     "url": "https://github.com/zumba/drill-sergeant/issues"
   },
   "dependencies": {
-    "async": "0.2.*",
+    "bluebird": "^3.2.1",
     "commander": "2.1.*",
     "github": "0.1.*",
     "lodash": "^3.10.1",
