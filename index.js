@@ -12,9 +12,13 @@ var ghClient, repos, mail;
 
 process.title = 'drillsergeant';
 
+var coerceList = function(input) {
+	return input.split(',');
+};
+
 command
 	.version(pkg.version)
-	.option('-r, --repo [user/repository]', 'Define the [comma delimited] repositories to check PRs.')
+	.option('-r, --repo <user/repository>', 'Define the [comma delimited] repositories to check PRs.', coerceList, [])
 	.option('-e, --email [email@address]', 'Set the [comma delimited] email address(es) to be notified.', null)
 	.option('-f, --replyto [Notifier Title <email@address>]', 'Set the reply to email address.', 'Drill Sergeant Notifier <no-reply@drillsergeant>')
 	.option('-l, --label', 'Should drill sergeant label the PR as stale?', false)
@@ -26,7 +30,7 @@ if (!process.env.GITHUB_TOKEN) {
 	process.exit(1);
 }
 
-if (!command.repo) {
+if (!command.repo.length) {
 	console.error('Repo argument must be provided.');
 	process.exit(1);
 }
@@ -36,12 +40,10 @@ if (!command.email && !command.label) {
 	process.exit(1);
 }
 
-repos = command.repo.split(',');
-
 ghClient = new github(process.env.GITHUB_TOKEN);
 notifier = new notify();
 
-stalerepos.retrieve(repos, ghClient, command.staletime)
+stalerepos.retrieve(command.repo, ghClient, command.staletime)
 	.then(function(results) {
 		if (!results.length) {
 			console.log('No stale pull requests to report.');
