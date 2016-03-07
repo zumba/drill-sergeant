@@ -46,7 +46,7 @@ stalerepos.retrieve(command.repo, ghClient, command.staletime)
 			return;
 		}
 		if (command.email) {
-			notifier.add(new notifiers.email(command.email, command.replyto, ghClient));
+			notifier.add(new notifiers.email(command.email, command.replyto));
 		}
 		if (command.label) {
 			notifier.add(new notifiers.github(ghClient));
