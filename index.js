@@ -4,7 +4,8 @@ var command = require('commander'),
 	stalerepos = require('./lib/stalerepos'),
 	notifiers = {
 		email: require('./lib/notifiers/email'),
-		github: require('./lib/notifiers/github')
+		github: require('./lib/notifiers/github'),
+		console: require('./lib/notifiers/console')
 	},
 	notify = require('./lib/notify');
 
@@ -35,11 +36,6 @@ if (!command.repo.length) {
 	process.exit(1);
 }
 
-if (!command.email && !command.label) {
-	console.error('Email or label argument must be provided.');
-	process.exit(1);
-}
-
 ghClient = new github(process.env.GITHUB_TOKEN);
 notifier = new notify();
 
@@ -54,6 +50,9 @@ stalerepos.retrieve(command.repo, ghClient, command.staletime)
 		}
 		if (command.label) {
 			notifier.add(new notifiers.github(ghClient));
+		}
+		if (!command.email && !command.label) {
+			notifier.add(notifiers.console);
 		}
 		notifier.notifyAll(results);
 	});
