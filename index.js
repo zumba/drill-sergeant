@@ -7,7 +7,8 @@ var command = require('commander'),
 		github: require('./lib/notifiers/github'),
 		console: require('./lib/notifiers/console')
 	},
-	notify = require('./lib/notify');
+	notify = require('./lib/notify'),
+	filters = require('./lib/filters');
 
 var ghClient, repos, mail;
 
@@ -24,6 +25,8 @@ command
 	.option('-f, --replyto [Notifier Title <email@address>]', 'Set the reply to email address.', 'Drill Sergeant Notifier <no-reply@drillsergeant>')
 	.option('-l, --label', 'Should drill sergeant label the PR as stale?', false)
 	.option('-s, --staletime [number of hours]', 'Set the PR stale threshold. (default: 24)', 24)
+	.option('--include-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must have at least one.', coerceList, [])
+	.option('--exclude-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must NOT contain.', coerceList, [])
 	.parse(process.argv);
 
 if (!process.env.GITHUB_TOKEN) {
@@ -40,6 +43,8 @@ ghClient = new github(process.env.GITHUB_TOKEN);
 notifier = new notify();
 
 stalerepos.retrieve(command.repo, ghClient, command.staletime)
+	.filter(filters.includeLabels.bind(null, command.includeLabels))
+	.filter(filters.excludeLabels.bind(null, command.excludeLabels))
 	.then(function(results) {
 		if (!results.length) {
 			console.log('No stale pull requests to report.');
