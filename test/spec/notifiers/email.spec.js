@@ -6,24 +6,8 @@ var _ = require('lodash');
 describe('Email lib', function() {
 	it('will email a notification with stale repos', function() {
 		var mail, clientMock, template, repos;
-		var ghClient = new github('token');
-		ghClient.setClient({
-			authenticate: function() {},
-			issues: {
-				getRepoIssue: function(options, callback) {
-					expect(options).to.deep.equal({
-						user: 'zumba',
-						repo: 'repository',
-						number: '19'
-					});
-					callback(null, {
-						labels: [{name: 'sometag'}]
-					});
-				}
-			}
-		});
 
-		mail = new email('test@test.com', 'test-from@test.com', ghClient);
+		mail = new email('test@test.com', 'test-from@test.com');
 		template = _.template(fs.readFileSync(__dirname + '/../../../templates/email.html').toString());
 		repos = [
 			{
@@ -33,7 +17,8 @@ describe('Email lib', function() {
 					html_url: 'https://github/zumba/repository/pull/19',
 					title: 'Some <b>awesome</b> pull request',
 					user: 'someuser',
-					number: '19'
+					number: '19',
+					labels: ['sometag']
 				}]
 			}
 		];

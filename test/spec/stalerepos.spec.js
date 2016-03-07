@@ -28,6 +28,13 @@ describe('Stale Repo Lib', function() {
 					fixed.updated_at = target.toISOString();
 					callback(null, fixed);
 				}
+			},
+			issues: {
+				getRepoIssue: function(options, callback) {
+					callback(null, {
+						labels: []
+					});
+				}
 			}
 		};
 		gc.setClient(clientMock);
@@ -40,7 +47,8 @@ describe('Stale Repo Lib', function() {
 						"html_url": "https://github.com/zumba/repository/pull/19",
 						"number": 19,
 						"title": "Some pull request.",
-						"user": "cjsaylor"
+						"user": "cjsaylor",
+						"labels": []
 					}
 				]
 			}
