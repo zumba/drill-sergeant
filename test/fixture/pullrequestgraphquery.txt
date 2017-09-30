@@ -1,0 +1,31 @@
+fragment prEdge on PullRequestEdge {
+  node {
+    title
+    author {
+      login
+    }
+    createdAt
+    url
+    number
+    updatedAt
+    labels(first: 20) {
+      edges {
+        node {
+          name
+        }
+      }
+    }
+  }
+}
+
+query {
+
+  zumba_repository: repository(owner: "zumba", name: "repository") {
+    pullRequests(last: 100, states: [OPEN]) {
+      edges {
+        ...prEdge
+      }
+    }
+  }
+
+}
