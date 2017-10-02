@@ -41,7 +41,8 @@ describe('Stale Repo Lib', function() {
 						"labels": [
 							"Code Reviewed",
 							"Stale"
-						]
+						],
+						"reviewCount": 1
 					}
 				]
 			}

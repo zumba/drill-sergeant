@@ -15,6 +15,9 @@ fragment prEdge on PullRequestEdge {
         }
       }
     }
+    reviews(states:[APPROVED],first:1) {
+      totalCount
+    }
   }
 }
 
