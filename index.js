@@ -27,6 +27,8 @@ command
 	.option('-s, --staletime [number of hours]', 'Set the PR stale threshold. (default: 24)', 24)
 	.option('--include-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must have at least one.', coerceList, [])
 	.option('--exclude-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must NOT contain.', coerceList, [])
+	.option('--include-reviewed [count]', 'Filter PRs with at least [count] approved reviews.',  0)
+	.option('--exclude-reviewed [count]', 'Filter PRs without at least [count] approved reviews.',  0)
 	.parse(process.argv);
 
 if (!process.env.GITHUB_TOKEN) {
@@ -49,7 +51,9 @@ function main() {
 			const allPRs = yield stalerepos.retrieve(command.repo, command.staletime);
 			const results = allPRs
 				.filter(filters.includeLabels.bind(null, command.includeLabels))
-				.filter(filters.excludeLabels.bind(null, command.excludeLabels));
+				.filter(filters.excludeLabels.bind(null, command.excludeLabels))
+				.filter(repo => command.includeReviewed === 0 || filters.includeReviewed(command.includeReviewed, repo))
+				.filter(repo => command.excludeReviewed === 0 || filters.excludeReviewed(command.excludeReviewed, repo));
 			if (!results.length) {
 				console.log('No stale pull requests to report.');
 				return
