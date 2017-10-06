@@ -23,7 +23,8 @@ fragment prEdge on PullRequestEdge {
 
 query {
 <% _.each(repos, function(repo) { %>
-  <%= repo.owner + '_' + repo.name %>: repository(owner: "<%= repo.owner %>", name: "<%= repo.name %>") {
+  <%= repo.owner + _.camelCase(repo.name) %>: repository(owner: "<%= repo.owner %>", name: "<%= repo.name %>") {
+    nameWithOwner
     pullRequests(last: 100, states: [OPEN]) {
       edges {
         ...prEdge

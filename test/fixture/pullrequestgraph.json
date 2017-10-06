@@ -1,6 +1,7 @@
 {
 	"data": {
 		"zumba_repository": {
+			"nameWithOwner": "zumba/repository",
 			"pullRequests": {
 				"edges": [
 					{

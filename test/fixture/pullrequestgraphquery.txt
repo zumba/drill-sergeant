@@ -23,7 +23,8 @@ fragment prEdge on PullRequestEdge {
 
 query {
 
-  zumba_repository: repository(owner: "zumba", name: "repository") {
+  zumbarepository: repository(owner: "zumba", name: "repository") {
+    nameWithOwner
     pullRequests(last: 100, states: [OPEN]) {
       edges {
         ...prEdge
