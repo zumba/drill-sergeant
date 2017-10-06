@@ -7,6 +7,7 @@ const StaleRepos = require('./lib/stalerepos');
 const notifiers = {
 	email: require('./lib/notifiers/email'),
 	github: require('./lib/notifiers/github'),
+	hipchat: require('./lib/notifiers/hipchat'),
 	console: require('./lib/notifiers/console')
 };
 const notify = require('./lib/notify');
@@ -29,6 +30,8 @@ command
 	.option('--exclude-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must NOT contain.', coerceList, [])
 	.option('--include-reviewed [count]', 'Filter PRs with at least [count] approved reviews.',  0)
 	.option('--exclude-reviewed [count]', 'Filter PRs without at least [count] approved reviews.',  0)
+	.option('--hipchat-apikey [api key]', 'Hipchat API integration key. If included, hipchat will attempt to be notified.')
+	.option('--hipchat-room [room name]', 'Hipchat room ID or name.')
 	.parse(process.argv);
 
 if (!process.env.GITHUB_TOKEN) {
@@ -56,7 +59,7 @@ function main() {
 				.filter(repo => command.excludeReviewed === 0 || filters.excludeReviewed(command.excludeReviewed, repo));
 			if (!results.length) {
 				console.log('No stale pull requests to report.');
-				return
+				return;
 			}
 			if (command.email) {
 				notifier.add(new notifiers.email(command.email, command.replyto));
@@ -64,7 +67,10 @@ function main() {
 			if (command.label) {
 				notifier.add(new notifiers.github(githubClient));
 			}
-			if (!command.email && !command.label) {
+			if (command.hipchatApikey) {
+				notifier.add(new notifiers.hipchat(command.hipchatApikey, command.hipchatRoom));
+			}
+			if (!command.email && !command.label && !command.hipchatApikey) {
 				notifier.add(notifiers.console);
 			}
 			notifier.notifyAll(results);

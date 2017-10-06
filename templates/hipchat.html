@@ -1,0 +1,17 @@
+<strong>Drill Sergeant - Stale Pull Requests</strong><br/>
+<% _.each(repos, function(repo) { %>
+<%= repo.repo %>
+<ul>
+	<% _.each(repo.prs, function(pr) { %>
+	<li>
+		<a href="<%= pr.html_url %>">
+			<%= pr.title %>
+		</a> [
+		<%= pr.user %>]
+		<i>
+			<%= pr.labels.join(', ') %>
+		</i>
+	</li>
+	<% }); %>
+</ul>
+<% }); %>
