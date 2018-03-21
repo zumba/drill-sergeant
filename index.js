@@ -24,7 +24,7 @@ command
 	.option('-r, --repo <user/repository>', 'Define the [comma delimited] repositories to check PRs.', coerceList, [])
 	.option('-e, --email [email@address]', 'Set the [comma delimited] email address(es) to be notified.', null)
 	.option('-f, --replyto [Notifier Title <email@address>]', 'Set the reply to email address.', 'Drill Sergeant Notifier <no-reply@drillsergeant>')
-	.option('--subject-template', 'Set the email notification subject template. (date variable available in the template.)', 'Drill Sergeant Stale Pull Request Report (<%= date %>)')
+	.option('--subject-template [Some template (<%= date %>)', 'Set the email notification subject template. (date variable available in the template.)', 'Drill Sergeant Stale Pull Request Report (<%= date %>)')
 	.option('-l, --label', 'Should drill sergeant label the PR as stale?', false)
 	.option('-s, --staletime [number of hours]', 'Set the PR stale threshold. (default: 24)', 24)
 	.option('--include-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must have at least one.', coerceList, [])
