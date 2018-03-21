@@ -26,5 +26,11 @@ module.exports = {
             "always"
         ],
         "no-console": OFF
+    },
+    "globals": {
+        // Testing globals
+        "describe": true,
+        "it": true,
+        "expect": true
     }
 };
