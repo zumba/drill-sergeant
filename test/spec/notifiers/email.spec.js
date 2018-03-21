@@ -1,13 +1,12 @@
 var fs = require('fs');
 var email = require('../../../lib/notifiers/email');
-var github = require('../../../lib/github');
 var _ = require('lodash');
 
 describe('Email lib', function() {
 	it('will email a notification with stale repos', function() {
 		var mail, clientMock, template, repos;
 
-		mail = new email('test@test.com', 'test-from@test.com');
+		mail = new email('test@test.com', 'test-from@test.com', 'Drill Sergeant Stale Pull Request Report (<%= date %>)');
 		template = _.template(fs.readFileSync(__dirname + '/../../../templates/email.html').toString());
 		repos = [
 			{
@@ -35,7 +34,7 @@ describe('Email lib', function() {
 		// Mock the date on the subject
 		email.getSubjectDate = function() {
 			return '2013/12/01';
-		}
+		};
 		mail.notify(repos);
 	});
 });
