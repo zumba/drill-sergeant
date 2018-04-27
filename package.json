@@ -31,7 +31,7 @@
     "hipchatter": "^1.0.0",
     "lodash": "^3.10.1",
     "nodemailer": "0.5.*",
-    "request": "^2.83.0",
+    "request": "^2.85.0",
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
