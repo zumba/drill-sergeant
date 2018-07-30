@@ -3,7 +3,7 @@ var email = require('../../../lib/notifiers/email');
 var _ = require('lodash');
 
 describe('Email lib', function() {
-	it('will email a notification with stale repos', function() {
+	it('will email a notification with stale repos', async function() {
 		var mail, clientMock, template, repos;
 
 		mail = new email('test@test.com', 'test-from@test.com');
@@ -21,23 +21,27 @@ describe('Email lib', function() {
 				}]
 			}
 		];
-		clientMock = function(options) {
-			expect(options).to.deep.equal({
-				from: 'test-from@test.com',
-				to: 'test@test.com',
-				subject: 'Drill Sergeant Stale Pull Request Report (2013/12/01)',
-				html: template({repos: repos})
-			});
-			expect(_.trim(options.html)).to.deep.equal(_.trim(fs.readFileSync(__dirname + '/email_output.html').toString()));
+		clientMock = {
+			sendMail: function(options) {
+				expect(options).to.deep.equal({
+					from: 'test-from@test.com',
+					to: 'test@test.com',
+					subject: 'Drill Sergeant Stale Pull Request Report (2013/12/01)',
+					html: template({
+						repos: repos
+					})
+				});
+				expect(_.trim(options.html)).to.deep.equal(_.trim(fs.readFileSync(__dirname + '/email_output.html').toString()));
+			}
 		};
 		mail.setClient(clientMock);
 		// Mock the date on the subject
-		email.getSubjectDate = function() {
+		email.prototype.getSubjectDate = function() {
 			return '2013/12/01';
 		};
-		mail.notify(repos);
+		await mail.notify(repos);
 	});
-	it('will email a notification with stale repos with customized email subject', function() {
+	it('will email a notification with stale repos with customized email subject', async function() {
 		var mail, clientMock, template, repos;
 
 		mail = new email('test@test.com', 'test-from@test.com', 'A customized subject (<%= date %>)');
@@ -55,20 +59,24 @@ describe('Email lib', function() {
 				}]
 			}
 		];
-		clientMock = function(options) {
-			expect(options).to.deep.equal({
-				from: 'test-from@test.com',
-				to: 'test@test.com',
-				subject: 'A customized subject (2013/12/01)',
-				html: template({repos: repos})
-			});
-			expect(_.trim(options.html)).to.deep.equal(_.trim(fs.readFileSync(__dirname + '/email_output.html').toString()));
+		clientMock = {
+			sendMail: function (options) {
+				expect(options).to.deep.equal({
+					from: 'test-from@test.com',
+					to: 'test@test.com',
+					subject: 'A customized subject (2013/12/01)',
+					html: template({
+						repos: repos
+					})
+				});
+				expect(_.trim(options.html)).to.deep.equal(_.trim(fs.readFileSync(__dirname + '/email_output.html').toString()));
+			}
 		};
 		mail.setClient(clientMock);
 		// Mock the date on the subject
-		email.getSubjectDate = function() {
+		email.prototype.getSubjectDate = function() {
 			return '2013/12/01';
 		};
-		mail.notify(repos);
+		await mail.notify(repos);
 	});
 });

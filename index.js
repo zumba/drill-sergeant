@@ -77,7 +77,7 @@ async function main() {
 		if (notifier.length() === 0) {
 			notifier.add(notifiers.console);
 		}
-		notifier.notifyAll(results);
+		await notifier.notifyAll(results);
 	} catch (e) {
 		console.error(e);
 		process.exit(1);
