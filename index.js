@@ -71,7 +71,7 @@ function main() {
 			if (command.hipchatApikey) {
 				notifier.add(new notifiers.hipchat(command.hipchatApikey, command.hipchatRoom));
 			}
-			if (!command.email && !command.label && !command.hipchatApikey) {
+		if (notifier.length() === 0) {
 				notifier.add(notifiers.console);
 			}
 			notifier.notifyAll(results);
