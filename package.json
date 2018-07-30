@@ -24,24 +24,24 @@
     "url": "https://github.com/zumba/drill-sergeant/issues"
   },
   "dependencies": {
-    "bluebird": "^3.2.1",
-    "co": "^4.6.0",
+    "@slack/client": "^4.3.1",
+    "bluebird": "^3.5.1",
     "commander": "2.1.*",
     "github": "0.2.4",
     "hipchatter": "^1.0.0",
     "lodash": "^3.10.1",
     "nodemailer": "0.5.*",
-    "request": "^2.85.0",
+    "request": "^2.87.0",
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "chai-as-promised": "^5.2.0",
-    "grunt": "^1.0.1",
-    "grunt-eslint": "^20.1.0",
+    "chai-as-promised": "^5.3.0",
+    "grunt": "^1.0.3",
+    "grunt-eslint": "^20.2.0",
     "grunt-mocha-test": "^0.12.7",
-    "mocha": "^2.4.5",
-    "sinon": "^1.17.3",
-    "sinon-chai": "^2.8.0"
+    "mocha": "^2.5.3",
+    "sinon": "^1.17.7",
+    "sinon-chai": "^2.14.0"
   }
 }
