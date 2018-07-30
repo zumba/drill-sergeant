@@ -29,8 +29,8 @@
     "commander": "2.1.*",
     "github": "0.2.4",
     "hipchatter": "^1.0.0",
-    "lodash": "^3.10.1",
-    "nodemailer": "0.5.*",
+    "lodash": "^4.17.10",
+    "nodemailer": "^4.6.7",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5"
   },
@@ -40,7 +40,7 @@
     "grunt": "^1.0.3",
     "grunt-eslint": "^20.2.0",
     "grunt-mocha-test": "^0.12.7",
-    "mocha": "^2.5.3",
+    "mocha": "^5.2.0",
     "sinon": "^1.17.7",
     "sinon-chai": "^2.14.0"
   }
