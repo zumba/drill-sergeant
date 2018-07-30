@@ -7,7 +7,8 @@ const notifiers = {
 	email: require('./lib/notifiers/email'),
 	github: require('./lib/notifiers/github'),
 	hipchat: require('./lib/notifiers/hipchat'),
-	console: require('./lib/notifiers/console')
+	slack: require('./lib/notifiers/slack'),
+	console: require('./lib/notifiers/console'),
 };
 const notify = require('./lib/notify');
 const filters = require('./lib/filters');
@@ -32,6 +33,7 @@ command
 	.option('--exclude-reviewed [count]', 'Filter PRs without at least [count] approved reviews.',  0)
 	.option('--hipchat-apikey [api key]', 'Hipchat API integration key. If included, hipchat will attempt to be notified.')
 	.option('--hipchat-room [room name]', 'Hipchat room ID or name.')
+	.option('--slack-webhook [url]', 'Slack webhook URL to post messages.')
 	.parse(process.argv);
 
 if (!process.env.GITHUB_TOKEN) {
@@ -45,38 +47,41 @@ if (!command.repo.length) {
 }
 
 async function main() {
-		const githubGraph = new GithubGraph(process.env.GITHUB_TOKEN);
-		const githubClient = new GithubClient(process.env.GITHUB_TOKEN);
-		const notifier = new notify();
-		const stalerepos = new StaleRepos(githubGraph);
-		try {
+	const githubGraph = new GithubGraph(process.env.GITHUB_TOKEN);
+	const githubClient = new GithubClient(process.env.GITHUB_TOKEN);
+	const notifier = new notify();
+	const stalerepos = new StaleRepos(githubGraph);
+	try {
 		const allPRs = await stalerepos.retrieve(command.repo, command.staletime);
-			const results = allPRs
-				.filter(filters.includeLabels.bind(null, command.includeLabels))
-				.filter(filters.excludeLabels.bind(null, command.excludeLabels))
-				.filter(repo => command.includeReviewed === 0 || filters.includeReviewed(command.includeReviewed, repo))
-				.filter(repo => command.excludeReviewed === 0 || filters.excludeReviewed(command.excludeReviewed, repo));
-			if (!results.length) {
-				console.log('No stale pull requests to report.');
-				return;
-			}
-			if (command.email) {
-				notifier.add(new notifiers.email(command.email, command.replyto, command.subjectTemplate));
-			}
-			if (command.label) {
-				notifier.add(new notifiers.github(githubClient));
-			}
-			if (command.hipchatApikey) {
-				notifier.add(new notifiers.hipchat(command.hipchatApikey, command.hipchatRoom));
-			}
-		if (notifier.length() === 0) {
-				notifier.add(notifiers.console);
-			}
-			notifier.notifyAll(results);
-		} catch (e) {
-			console.error(e);
-			process.exit(1);
+		const results = allPRs
+			.filter(filters.includeLabels.bind(null, command.includeLabels))
+			.filter(filters.excludeLabels.bind(null, command.excludeLabels))
+			.filter(repo => command.includeReviewed === 0 || filters.includeReviewed(command.includeReviewed, repo))
+			.filter(repo => command.excludeReviewed === 0 || filters.excludeReviewed(command.excludeReviewed, repo));
+		if (!results.length) {
+			console.log('No stale pull requests to report.');
+			return;
 		}
+		if (command.email) {
+			notifier.add(new notifiers.email(command.email, command.replyto, command.subjectTemplate));
+		}
+		if (command.label) {
+			notifier.add(new notifiers.github(githubClient));
+		}
+		if (command.hipchatApikey) {
+			notifier.add(new notifiers.hipchat(command.hipchatApikey, command.hipchatRoom));
+		}
+		if (command.slackWebhook) {
+			notifier.add(new notifiers.slack(command.slackWebhook));
+		}
+		if (notifier.length() === 0) {
+			notifier.add(notifiers.console);
+		}
+		notifier.notifyAll(results);
+	} catch (e) {
+		console.error(e);
+		process.exit(1);
+	}
 }
 
 main();
