@@ -1,5 +1,4 @@
 const command = require('commander');
-const co = require('co');
 const pkg = require('./package.json');
 const GithubClient = require('./lib/github');
 const GithubGraph = require('./lib/githubGraph');
@@ -45,14 +44,13 @@ if (!command.repo.length) {
 	process.exit(1);
 }
 
-function main() {
-	co(function*() {
+async function main() {
 		const githubGraph = new GithubGraph(process.env.GITHUB_TOKEN);
 		const githubClient = new GithubClient(process.env.GITHUB_TOKEN);
 		const notifier = new notify();
 		const stalerepos = new StaleRepos(githubGraph);
 		try {
-			const allPRs = yield stalerepos.retrieve(command.repo, command.staletime);
+		const allPRs = await stalerepos.retrieve(command.repo, command.staletime);
 			const results = allPRs
 				.filter(filters.includeLabels.bind(null, command.includeLabels))
 				.filter(filters.excludeLabels.bind(null, command.excludeLabels))
@@ -79,7 +77,6 @@ function main() {
 			console.error(e);
 			process.exit(1);
 		}
-	});
 }
 
 main();
