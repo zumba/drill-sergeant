@@ -29,7 +29,7 @@
     "commander": "2.1.*",
     "github": "0.2.4",
     "hipchatter": "^1.0.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.11",
     "nodemailer": "^4.6.7",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5"
