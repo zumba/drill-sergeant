@@ -6,7 +6,6 @@ const StaleRepos = require('./lib/stalerepos');
 const notifiers = {
 	email: require('./lib/notifiers/email'),
 	github: require('./lib/notifiers/github'),
-	hipchat: require('./lib/notifiers/hipchat'),
 	slack: require('./lib/notifiers/slack'),
 	console: require('./lib/notifiers/console'),
 };
@@ -31,8 +30,6 @@ command
 	.option('--exclude-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must NOT contain.', coerceList, [])
 	.option('--include-reviewed [count]', 'Filter PRs with at least [count] approved reviews.',  0)
 	.option('--exclude-reviewed [count]', 'Filter PRs without at least [count] approved reviews.',  0)
-	.option('--hipchat-apikey [api key]', 'Hipchat API integration key. If included, hipchat will attempt to be notified.')
-	.option('--hipchat-room [room name]', 'Hipchat room ID or name.')
 	.option('--slack-webhook [url]', 'Slack webhook URL to post messages.')
 	.parse(process.argv);
 
@@ -67,9 +64,6 @@ async function main() {
 		}
 		if (command.label) {
 			notifier.add(new notifiers.github(githubClient));
-		}
-		if (command.hipchatApikey) {
-			notifier.add(new notifiers.hipchat(command.hipchatApikey, command.hipchatRoom));
 		}
 		if (command.slackWebhook) {
 			notifier.add(new notifiers.slack(command.slackWebhook));
