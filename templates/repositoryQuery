@@ -8,6 +8,7 @@ fragment prEdge on PullRequestEdge {
     url
     number
     updatedAt
+    isDraft
     labels(first: 20) {
       edges {
         node {
