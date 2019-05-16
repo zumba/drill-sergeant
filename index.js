@@ -30,6 +30,7 @@ command
 	.option('--exclude-labels [labels]', 'Define a [comma delimited] group of labels of which a PR must NOT contain.', coerceList, [])
 	.option('--include-reviewed [count]', 'Filter PRs with at least [count] approved reviews.',  0)
 	.option('--exclude-reviewed [count]', 'Filter PRs without at least [count] approved reviews.',  0)
+	.option('--exclude-drafts', 'Should drill sergeant filter PRs in draft status?', false)
 	.option('--slack-webhook [url]', 'Slack webhook URL to post messages.')
 	.parse(process.argv);
 
@@ -54,7 +55,8 @@ async function main() {
 			.filter(filters.includeLabels.bind(null, command.includeLabels))
 			.filter(filters.excludeLabels.bind(null, command.excludeLabels))
 			.filter(repo => command.includeReviewed === 0 || filters.includeReviewed(command.includeReviewed, repo))
-			.filter(repo => command.excludeReviewed === 0 || filters.excludeReviewed(command.excludeReviewed, repo));
+			.filter(repo => command.excludeReviewed === 0 || filters.excludeReviewed(command.excludeReviewed, repo))
+			.filter(repo => !command.excludeDrafts || filters.excludeDrafts(repo));
 		if (!results.length) {
 			console.log('No stale pull requests to report.');
 			return;
