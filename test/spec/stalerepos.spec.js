@@ -38,6 +38,7 @@ describe('Stale Repo Lib', function() {
 						"number": 19,
 						"title": "Some pull request.",
 						"user": "cjsaylor",
+						"isDraft": false,
 						"labels": [
 							"Code Reviewed",
 							"Stale"
